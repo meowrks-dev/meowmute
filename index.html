@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeowMute — アプリごとの音量をホットキーで</title>
+<meta name="description" content="Windows 向けのアプリ別音量コントロールツール。好きなホットキーでミュート、音量切り替え、ホイール調整。無料ダウンロード。">
+<meta property="og:title" content="MeowMute">
+<meta property="og:description" content="あのアプリだけを、ワンキーで。">
+<meta property="og:image" content="assets/icon.png">
+<link rel="icon" href="assets/icon.png" type="image/png">
+<style>
+  :root {
+    --bg: #1F1F1F;
+    --surface: #272727;
+    --surface-2: #2B2B2B;
+    --border: #3D3D3D;
+    --text: #FFFFFF;
+    --text-2: #CFCFCF;
+    --text-3: #9D9D9D;
+    --accent: #60CDFF;
+    --accent-hover: #7ED6FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI Variable Display", "Segoe UI", -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic UI", sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  header .container { display: flex; align-items: center; gap: 12px; }
+  header img { width: 32px; height: 32px; }
+  header .brand { font-size: 18px; font-weight: 600; }
+
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  .hero img.logo {
+    width: 120px; height: 120px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .hero p.tagline {
+    font-size: 20px;
+    color: var(--text-2);
+    margin-bottom: 40px;
+  }
+  .btn-download {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .btn-download:hover {
+    background: var(--accent-hover);
+    color: #000;
+  }
+  .hero .meta {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  .section { padding: 60px 0; border-top: 1px solid var(--border); }
+  .section h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .feature h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .feature p {
+    font-size: 14px;
+    color: var(--text-2);
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 24px;
+  }
+  .plan.premium { border-color: var(--accent); }
+  .plan h3 {
+    font-size: 16px;
+    color: var(--text-3);
+    margin-bottom: 8px;
+  }
+  .plan .price {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .plan ul {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .plan ul li {
+    font-size: 14px;
+    color: var(--text-2);
+    padding: 4px 0 4px 20px;
+    position: relative;
+  }
+  .plan ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .plan .cta {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .plan.free .cta {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .plan.premium .cta {
+    background: var(--accent);
+    color: #000;
+  }
+  .plan .cta:hover { opacity: 0.85; }
+
+  .requirements {
+    text-align: center;
+    color: var(--text-2);
+    font-size: 14px;
+  }
+  .requirements strong { color: var(--text); }
+
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 0 40px; }
+    .hero h1 { font-size: 36px; }
+    .hero p.tagline { font-size: 17px; }
+    .section { padding: 40px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <img src="assets/icon.png" alt="">
+    <span class="brand">MeowMute</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <img class="logo" src="assets/icon.png" alt="MeowMute">
+    <h1>MeowMute</h1>
+    <p class="tagline">あのアプリだけを、ワンキーで。</p>
+    <a class="btn-download" href="https://github.com/meowrks-dev/meowmute/releases/latest/download/MeowMute-v1.0.zip">Windows 向けダウンロード</a>
+    <div class="meta">無料・Windows 10 / 11 (64bit)</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>できること</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>ミュート切替</h3>
+        <p>アプリ単位でミュート／解除</p>
+      </div>
+      <div class="feature">
+        <h3>音量切り替え</h3>
+        <p>2 つの音量をワンキーで行き来</p>
+      </div>
+      <div class="feature">
+        <h3>ホイール音量調整</h3>
+        <p>ホットキー + マウスホイールで滑らかに調整</p>
+      </div>
+      <div class="feature">
+        <h3>マルチコントロール</h3>
+        <p>1 つのキーで 2 つのアプリの音量を同時操作</p>
+      </div>
+      <div class="feature">
+        <h3>システム音量表示</h3>
+        <p>PC 全体の音量をメイン画面で確認</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>ライセンス</h2>
+    <div class="plans">
+      <div class="plan free">
+        <h3>無料版</h3>
+        <div class="price">¥0</div>
+        <ul>
+          <li>登録できるアプリ 1 件</li>
+          <li>ミュート機能</li>
+        </ul>
+        <a class="cta" href="https://github.com/meowrks-dev/meowmute/releases/latest/download/MeowMute-v1.0.zip">ダウンロード</a>
+      </div>
+      <div class="plan premium">
+        <h3>プレミアム</h3>
+        <div class="price">¥480 <span style="font-size:13px;color:var(--text-3);font-weight:normal;">買い切り</span></div>
+        <ul>
+          <li>複数アプリ対応</li>
+          <li>音量切り替え</li>
+          <li>ホイール音量調整</li>
+          <li>マルチコントロール</li>
+        </ul>
+        <a class="cta" href="https://meowrks.booth.pm/" target="_blank" rel="noopener">BOOTH で購入</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container requirements">
+    <strong>動作環境</strong>: Windows 10 / 11 (64bit)<br>
+    .NET ランタイム同梱・インストール不要・単一 exe で動作
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    © Meowrks
+  </div>
+</footer>
+
+</body>
+</html>
